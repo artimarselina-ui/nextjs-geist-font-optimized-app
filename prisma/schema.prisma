@@ -1,0 +1,183 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Dosen {
+  id                    Int     @id @default(autoincrement())
+  nama                  String
+  nidn                  String  @unique
+  status                String?
+  pangkat               String?
+  foto                  String?
+  isActive              Boolean @default(true)
+  deskripsiKepakaran    String?
+  kepakaran1            String?
+  kepakaran2            String?
+  kepakaran3            String?
+  kepakaran4            String?
+  kepakaran5            String?
+
+  sinta                 String?
+  googleScholar         String?
+  scopus                String?
+  researchgate          String?
+
+  // Relations
+  penghargaan           Penghargaan[]
+  penelitian            Penelitian[]
+  pengabdian            Pengabdian[]
+  publikasiBuku         PublikasiBuku[]
+  publikasiJurnal       PublikasiJurnal[]
+  risetHKI              RisetHKI[]
+  risetNonHKI           RisetNonHKI[]
+
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+}
+
+model Penghargaan {
+  id                    Int     @id @default(autoincrement())
+  dosenId               Int
+  dosen                 Dosen   @relation(fields: [dosenId], references: [id], onDelete: Cascade)
+  nama                  String
+  bentuk                String
+  tahun                 String
+  tingkat               String
+
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+}
+
+model Penelitian {
+  id                    Int     @id @default(autoincrement())
+  dosenId               Int
+  dosen                 Dosen   @relation(fields: [dosenId], references: [id], onDelete: Cascade)
+  semester              String
+  judul                 String
+  tahun                 String
+
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+}
+
+model Pengabdian {
+  id                    Int     @id @default(autoincrement())
+  dosenId               Int
+  dosen                 Dosen   @relation(fields: [dosenId], references: [id], onDelete: Cascade)
+  semester              String
+  judul                 String
+  tahun                 String
+
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+}
+
+model PublikasiBuku {
+  id                    Int     @id @default(autoincrement())
+  dosenId               Int
+  dosen                 Dosen   @relation(fields: [dosenId], references: [id], onDelete: Cascade)
+  semester              String
+  penerbit              String
+  judul                 String
+  isbn                  String
+  tahun                 String
+
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+}
+
+model PublikasiJurnal {
+  id                    Int     @id @default(autoincrement())
+  dosenId               Int
+  dosen                 Dosen   @relation(fields: [dosenId], references: [id], onDelete: Cascade)
+  semester              String
+  namaJurnal            String
+  judul                 String
+  jenisJurnal           String
+  tahun                 String
+  issn                  String
+
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+}
+
+model RisetHKI {
+  id                    Int     @id @default(autoincrement())
+  dosenId               Int
+  dosen                 Dosen   @relation(fields: [dosenId], references: [id], onDelete: Cascade)
+  semester              String
+  judul                 String
+  noHKI                 String
+  tahun                 String
+  jenis                 String
+
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+}
+
+model RisetNonHKI {
+  id                    Int     @id @default(autoincrement())
+  dosenId               Int
+  dosen                 Dosen   @relation(fields: [dosenId], references: [id], onDelete: Cascade)
+  semester              String
+  judul                 String
+  jenis                 String
+  tahun                 String
+  hasil                 String
+
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+}
+
+model Tendik {
+  id                    Int     @id @default(autoincrement())
+  nama                  String
+  nip                   String  @unique
+  jabatan               String?
+  foto                  String?
+  isActive              Boolean @default(true)
+  deskripsiKepakaran    String?
+  penelitian            String?
+  pengabdian            String?
+  publikasiJurnal       String?
+  buku                  String?
+  risetHKI              String?
+  risetNonHKI           String?
+  mediaSocial           String?
+
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+}
+
+model Administrator {
+  id                    Int     @id @default(autoincrement())
+  name                  String
+  email                 String  @unique
+  password              String
+  role                  String  @default("admin")
+  isActive              Boolean @default(true)
+
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+}
+
+model User {
+  id                    Int     @id @default(autoincrement())
+  name                  String
+  email                 String  @unique
+  password              String
+  role                  String  @default("user")
+  isActive              Boolean @default(true)
+
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+}
